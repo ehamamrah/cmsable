@@ -9,5 +9,5 @@ UNFOLD = {
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": False,
     "SHOW_BACK_BUTTON": True,
-    "SITE_SYMBOL": "payments",
+    "SITE_SYMBOL": "video_library",
 }
