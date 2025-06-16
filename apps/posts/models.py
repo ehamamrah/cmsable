@@ -11,9 +11,14 @@ class Category(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=250, blank=False)
     description = models.TextField(blank=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
+    
+    @classmethod
+    def get_active_list(cls):
+        return cls.objects.filter(active=True)
     
     class Meta:
         verbose_name_plural = 'Categories'
