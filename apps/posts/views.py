@@ -11,6 +11,7 @@ class PostListView(generics.ListAPIView):
     """
     View for listing all posts
     """
+    queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -32,11 +33,14 @@ class PostCreateView(generics.CreateAPIView):
     """
     View for creating a new post
     """
+    queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 class PostDetailView(generics.RetrieveAPIView):
     """

@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from apps.core.models import BaseModel
+from apps.users.models import User
 
 class PostLanguage(models.TextChoices):
     ENGLISH = 'en', _('English')
@@ -37,11 +38,14 @@ class Post(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
     description = models.TextField()
-    categories = models.ManyToManyField(Category, through='PostCategory', related_name='posts')
+    categories = models.ManyToManyField(Category, through='PostCategory', related_name='posts', blank=False)
     language = models.CharField(max_length=2, choices=PostLanguage.choices, default=PostLanguage.ARABIC)
     duration = models.DurationField()
     publish_date = models.DateTimeField()
     link = models.URLField()
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='posts', blank=False, null=False
+    )
 
     def __str__(self):
         return self.title
