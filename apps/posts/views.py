@@ -96,10 +96,3 @@ class CategoriesView(generics.ListCreateAPIView):
     queryset = Category.get_active_list()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        if 'pk' in kwargs:
-            category = get_object_or_404(Category, pk=kwargs['pk'])
-            serializer = self.get_serializer(category)
-            return Response(serializer.data)
-        return super().get(request, *args, **kwargs)
