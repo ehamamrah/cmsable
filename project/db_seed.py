@@ -2,17 +2,31 @@ from apps.posts.models import Post, Category
 from apps.users.models import User
 from apps.posts.automated_fetcher.main_reader import MainReader
 import random
+from django.contrib.auth.hashers import make_password
 
 def seed_users():
-    User.objects.get_or_create(
+    user, created = User.objects.get_or_create(
         email='test@test.com',
         defaults={
             'username': 'testuser',
-            'password': 'testpassword',
+            'password': make_password('TestProject2025'),
             'first_name': 'Test',
-            'last_name': 'User'
+            'last_name': 'User',
+            'is_staff': True,
+            'is_superuser': True,
+            'role': 'admin'
         }
     )
+    if created:
+        print(f"Created superadmin user: {user.email}")
+    else:
+        # Update existing user to be superadmin
+        user.is_staff = True
+        user.is_superuser = True
+        user.role = 'admin'
+        user.password = make_password('TestProject2025')  # Hash the password for existing user too
+        user.save()
+        print(f"Updated user to superadmin: {user.email}")
 
 def seed_categories():
     categories = [
@@ -79,8 +93,8 @@ def seed_posts():
 def run_seed():
     print('Seeding users...')
     seed_users()
-    print('Seeding categories...')
-    seed_categories()
-    print('Seeding posts...')
-    seed_posts()
+    # print('Seeding categories...')
+    # seed_categories()
+    # print('Seeding posts...')
+    # seed_posts()
     print('Seeding completed!')

@@ -1,0 +1,381 @@
+{
+	"info": {
+		"_postman_id": "a1ed21ad-af3b-4fa8-8271-3d49a513c53f",
+		"name": "CMS-Able",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2409129"
+	},
+	"item": [
+		{
+			"name": "Login/Authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"test\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.globals.set(\"TOKEN\", jsonData.access);",
+							"    pm.environment.set(\"TOKEN\", jsonData.access);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"test\",\n    \"password\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/auth/token/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"auth",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Of Categories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/posts/categories",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"posts",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Of Posts",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/posts/?page=1",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"posts",
+						""
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"test\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.globals.set(\"POST_ID\", jsonData.id);",
+							"    pm.environment.set(\"POST_ID\", jsonData.id);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"قصة يأجوج ومأجوج كما لم تسمعها من قبل | بودكاست فنجان\",\n  \"description\": \"\\nلدى ضيفي في هذه الحلقة تفسير مختلف تمامًا عمّا نتخيله عن يأجوج ومأجوج، إذ قدّم قبل أكثر من عشر سنوات بحثًا درس فيه قصتهم، مستندًا إلى حقائق علميّة، وإلى ما ورد في القرآن والسنة، وتوصّل إلى نتيجة أنهم ليسوا بشرًا! \\nفأردت أن أرى ما لديه، وأن أفهم الأدلة التي استند إليها، وأطرح عليه أهم الاعتراضات على تفسيره. ضيفي أسامة الشاذلي، طبيب وكاتب وروائي مصري. \\n\",\n  \"duration\": \"7261\",\n  \"link\": \"https://www.youtube.com/watch?v=fMD0zj_4EVQ\",\n  \"category_ids\": [\"61ca313e-9bf7-41cd-86b5-cfd4a0e742df\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/posts/create/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"posts",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auto Create Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"test\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.globals.set(\"POST_ID\", jsonData.id);",
+							"    pm.environment.set(\"POST_ID\", jsonData.id);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"link\": \"https://www.youtube.com/watch?v=udrcf15LyhI\",\n  \"category_ids\": [\"508981d5-9234-406e-9bc9-7358dc7deddd\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/posts/auto-create/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"posts",
+						"auto-create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Post Details",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/posts/{{POST_ID}}/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"posts",
+						"{{POST_ID}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Post Details",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"category_ids\": [\"61ca313e-9bf7-41cd-86b5-cfd4a0e742df\", \"508981d5-9234-406e-9bc9-7358dc7deddd\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/posts/{{POST_ID}}/update",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"posts",
+						"{{POST_ID}}",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Post",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/posts/{{POST_ID}}/delete",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"posts",
+						"{{POST_ID}}",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Discovery",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/posts/discovery?search=فنجان&ordering=title&language=ar",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"posts",
+						"discovery"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "فنجان"
+						},
+						{
+							"key": "ordering",
+							"value": "title"
+						},
+						{
+							"key": "categories",
+							"value": "508981d5-9234-406e-9bc9-7358dc7deddd",
+							"disabled": true
+						},
+						{
+							"key": "language",
+							"value": "ar"
+						},
+						{
+							"key": "category_name",
+							"value": "Entertainment",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
