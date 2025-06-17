@@ -1,6 +1,9 @@
 import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from datetime import timedelta
+
 from apps.core.models import BaseModel
 from apps.users.models import User
 
@@ -49,3 +52,16 @@ class Post(BaseModel):
 
     def __str__(self):
         return self.title
+
+    def format_duration(self):
+        """
+        Return the duration in a formatted string (HH:MM:SS)
+        """
+        total_seconds = int(self.duration.total_seconds())
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+        seconds = total_seconds % 60
+        
+        if hours > 0:
+            return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+        return f"{minutes:02d}:{seconds:02d}"
