@@ -129,7 +129,7 @@ class CategoriesView(generics.ListCreateAPIView):
 class PostDiscoveryView(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = []  # Empty list means no authentication required
+    permission_classes = [] # No authentication required [Open to all]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['categories', 'language']
     search_fields = ['title', 'user__username']
@@ -137,5 +137,10 @@ class PostDiscoveryView(generics.ListAPIView):
     ordering = ['-publish_date']
 
     def get_queryset(self):
-        queryset = Post.objects.all()
-        return queryset
+        queryset = self.queryset
+
+        category_name = self.request.query_params.get('category_name', None)
+        if category_name:
+            queryset = queryset.filter(categories__name__icontains=category_name)
+            
+        return queryset.distinct()
