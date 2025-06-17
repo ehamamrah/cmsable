@@ -6,7 +6,8 @@ from apps.posts.views import (
     PostUpdateView,
     PostDeleteView,
     CategoriesView,
-    PostAutoCreateView
+    PostAutoCreateView,
+    PostDiscoveryView
 )
 
 urlpatterns = [
@@ -20,6 +21,8 @@ urlpatterns = [
     path('<uuid:pk>/update', PostUpdateView.as_view(), name='post-update'),
 
     path('<uuid:pk>/delete', PostDeleteView.as_view(), name='post-delete'),
+
+    path('discovery/', PostDiscoveryView.as_view(), name='post-discovery'),
 
     path('categories/', CategoriesView.as_view(), name='categories-list'),
     path('categories/<uuid:pk>/', CategoriesView.as_view(), name='categories-detail'),

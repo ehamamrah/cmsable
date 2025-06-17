@@ -124,3 +124,18 @@ class CategoriesView(generics.ListCreateAPIView):
     queryset = Category.get_active_list()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
+
+
+class PostDiscoveryView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = []  # Empty list means no authentication required
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['categories', 'language']
+    search_fields = ['title', 'user__username']
+    ordering_fields = ['publish_date', 'title']
+    ordering = ['-publish_date']
+
+    def get_queryset(self):
+        queryset = Post.objects.all()
+        return queryset
