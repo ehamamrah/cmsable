@@ -19,10 +19,10 @@ urlpatterns = [
     path('<uuid:pk>/', PostDetailView.as_view(), name='post-detail'),
     
     # Update post
-    path('<uuid:pk>/update/', PostUpdateView.as_view(), name='post-update'),
+    path('<uuid:pk>/update', PostUpdateView.as_view(), name='post-update'),
     
     # Delete post
-    path('<uuid:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
+    path('<uuid:pk>/delete', PostDeleteView.as_view(), name='post-delete'),
     
     # Categories endpoints
     path('categories/', CategoriesView.as_view(), name='categories-list'),

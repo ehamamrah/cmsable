@@ -4,6 +4,11 @@ from .models import Category, Post, PostCategory
 
 from unfold.admin import ModelAdmin
 
+class PostCategoryInline(admin.TabularInline):
+    model = PostCategory
+    extra = 1
+    autocomplete_fields = ['category']
+
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
     list_display = ('name', 'description', 'created_at', 'updated_at')
@@ -12,10 +17,12 @@ class CategoryAdmin(ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(ModelAdmin):
-    list_display = ('title', 'language', 'duration', 'publish_date', 'link', 'created_at', 'updated_at')
+    list_display = ('title', 'language', 'duration', 'publish_date', 'link')
     search_fields = ('title',)
     list_filter = ('language', 'publish_date')
     ordering = ('-publish_date',)
+    inlines = [PostCategoryInline]
+    fields = ('title', 'description', 'language', 'duration', 'link', 'publish_date')
 
 @admin.register(PostCategory)
 class PostCategoryAdmin(ModelAdmin):

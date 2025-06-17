@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Post, Category
 from .serializers import PostSerializer, CategorySerializer
-from .permissions import IsEditorOrReadOnly, IsContentManagerOrReadOnly
+from .permissions import CanCreatePost, CanUpdatePost, CanDeletePost
 
 class PostListView(generics.ListAPIView):
     queryset = Post.objects.all()
@@ -29,7 +29,7 @@ class PostListView(generics.ListAPIView):
 class PostCreateView(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CanCreatePost]
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -49,7 +49,7 @@ class PostDetailView(generics.RetrieveAPIView):
 
 class PostUpdateView(generics.UpdateAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CanUpdatePost]
     lookup_field = 'pk'
 
     def get_object(self):
@@ -57,11 +57,6 @@ class PostUpdateView(generics.UpdateAPIView):
             return Post.objects.get(pk=self.kwargs['pk'])
         except Post.DoesNotExist:
             raise NotFound(detail="Post not found")
-
-    def get_permissions(self):
-        if self.request.user.role in ['admin', 'content_manager']:
-            return [IsContentManagerOrReadOnly()]
-        return [IsEditorOrReadOnly()]
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -71,7 +66,7 @@ class PostUpdateView(generics.UpdateAPIView):
 
 class PostDeleteView(generics.DestroyAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CanDeletePost]
     lookup_field = 'pk'
 
     def get_object(self):
@@ -79,11 +74,6 @@ class PostDeleteView(generics.DestroyAPIView):
             return Post.objects.get(pk=self.kwargs['pk'])
         except Post.DoesNotExist:
             raise NotFound(detail="Post not found")
-
-    def get_permissions(self):
-        if self.request.user.role in ['admin', 'content_manager']:
-            return [IsContentManagerOrReadOnly()]
-        return [IsEditorOrReadOnly()]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
