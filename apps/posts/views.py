@@ -59,8 +59,8 @@ class PostUpdateView(generics.UpdateAPIView):
             raise NotFound(detail="Post not found")
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        if self.request.user.role == 'editor':
+        queryset = Post.objects.all()
+        if self.request.user.is_editor():
             return queryset.filter(user=self.request.user)
         return queryset
 
